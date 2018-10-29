@@ -41,7 +41,7 @@ const putNote = (updatedNote) => {
 		.update(title, (text_body = textBody), _id, __v);
 };
 
-const delNote = (id) => {
+const delNote = (_id) => {
 	return db('notes')
 		.where({ _id })
 		.del();

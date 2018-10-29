@@ -20,7 +20,20 @@ router.get('/', (req, res, next) => {
 		});
 });
 
-router.get('/:id', (req, res, next) => {});
+router.get('/:id', (req, res, next) => {
+	const { id } = req.params;
+	getNotes(id)
+		.then((note) => {
+			if (note !== undefined) {
+				res.status(200).json(note);
+			} else {
+				next(['h404', `Note with ID ${id} not found.`]);
+			}
+		})
+		.catch((err) => {
+			next(['h500', err]);
+		});
+});
 
 router.post('/', (req, res, next) => {});
 

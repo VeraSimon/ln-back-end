@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
 			.unique()
 			.notNullable();
 		tbl.integer('__v')
+			.notNullable()
 			.unsigned()
 			.defaultTo(0);
 	});

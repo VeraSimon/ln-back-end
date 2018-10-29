@@ -5,10 +5,7 @@ const uuidv5 = require('uuid/v5');
 const { getNotes, postNote, putNote, delNote } = require('../data/models/notesmodels');
 
 const router = express.Router();
-
-// uuidv5('Lambda Notes', uuidv4);
-
-// router.get('/', (req, res, next) => res.status(200).json({ message: 'Hello, world!' }));
+const uuidName = process.env.UUID_NAME || '00000000-0000-0000-0000-000000000000';
 
 router.get('/', (req, res, next) => {
 	getNotes()
@@ -35,7 +32,22 @@ router.get('/:id', (req, res, next) => {
 		});
 });
 
-router.post('/', (req, res, next) => {});
+router.post('/', (req, res, next) => {
+	const { title, textBody } = req.body;
+	if (title && textBody) {
+		const _id = uuidv5(uuidName, uuidv4());
+		const newNote = { title: title, text_body: textBody, _id: _id, __v: 0 };
+		postNote(newNote)
+			.then((note) => {
+				res.status(201).json({ id: note });
+			})
+			.catch((err) => {
+				next(['h500', err]);
+			});
+	} else {
+		next(['h400', 'Missing note properties']);
+	}
+});
 
 router.put('/:id', (req, res, next) => {});
 

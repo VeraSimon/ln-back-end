@@ -27,10 +27,9 @@ const postNote = (newNote) => {
 	//     .insert(tag)
 	//     .into('tags');
 	// });
-	const { title, textBody, _id, __v } = newNote;
 
 	return db('notes')
-		.insert(title, (text_body = textBody), _id)
+		.insert(newNote)
 		.into('notes');
 };
 

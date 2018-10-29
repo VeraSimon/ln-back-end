@@ -1,7 +1,12 @@
 const express = require('express');
+const uuidv4 = require('uuid/v4');
+const uuidv5 = require('uuid/v5');
+
+const notesModels = require('../data/models/notesmodels');
+
 const router = express.Router();
 
-// uuid('Lambda Notes', process.env.NAMESPACE);
+// uuidv5('Lambda Notes', uuidv4);
 
 router.get('/', (req, res, next) => res.status(200).json({ message: 'Hello, world!' }));
 

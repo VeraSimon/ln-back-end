@@ -2,7 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
-const uuid = require('uuid/v5');
 
 const notesRoutes = require('../api/notesroutes');
 const { errorHandler } = require('../errorHandler/handlers');

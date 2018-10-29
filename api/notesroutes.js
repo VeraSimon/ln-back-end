@@ -2,7 +2,7 @@ const express = require('express');
 const uuidv4 = require('uuid/v4');
 const uuidv5 = require('uuid/v5');
 
-const notesModels = require('../data/models/notesmodels');
+const { getNotes, postNote, putNote, delNote } = require('../data/models/notesmodels');
 
 const router = express.Router();
 

@@ -6,7 +6,9 @@ exports.up = function(knex, Promise) {
 		tbl.uuid('_id')
 			.unique()
 			.notNullable();
-		tbl.integer('__v').defaultTo(0);
+		tbl.integer('__v')
+			.unsigned()
+			.defaultTo(0);
 	});
 };
 

@@ -34,7 +34,12 @@ const postNote = (newNote) => {
 		.into('notes');
 };
 
-const putNote = (updatedNote) => {};
+const putNote = (updatedNote) => {
+	const { title, textBody, _id, __v } = updatedNote;
+	return db('notes')
+		.where({ _id })
+		.update(title, (text_body = textBody), _id, __v);
+};
 
 const delNote = (id) => {};
 

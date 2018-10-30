@@ -58,28 +58,28 @@ router.post('/create', (req, res, next) => {
 
 router.put('/edit/:id', (req, res, next) => {
 	const _id = req.params.id;
-	// so much nonsense __v.
-	// can't reference req.body.__v directly, despite it conforming with javascript naming convention.
-	// can't increment it in place.
-	// all this just to keep functional parity with the original backend.
-	// >.>
-	// <.<
 	if (req.body.title && req.body.textBody && req.body.tags) {
 		const { title, textBody } = req.body;
-		let __v = req.body['__v'];
-		__v += 1;
-		const updatedNote = { title, textBody, _id, __v };
-		putNote(updatedNote)
-			.then((updateCount) => {
-				if (updateCount > 0) {
-					res.status(200).json({ updateCount });
+		// using getNotes(id) in lieu of having a DB that can auto-increment a column on update
+		getNotes(_id)
+			.then((note) => {
+				if (note !== undefined) {
+					let __v = note['__v'];
+					__v += 1;
+					const updatedNote = { title, textBody, _id, __v };
+					// here's the putNote(editedNote)!
+					putNote(updatedNote)
+						.then((updateCount) => {
+							res.status(200).json({ updateCount });
+						})
+						.catch((err) => {
+							next(['h500', err]);
+						});
 				} else {
 					next(['h404', `The note with ID '${_id}' was not found!`]);
 				}
 			})
-			.catch((err) => {
-				next(['h500', err]);
-			});
+			.catch((err) => next(['h500', err]));
 	} else {
 		next(['h400', 'Missing note property!']);
 	}

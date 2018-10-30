@@ -24,7 +24,7 @@ router.get('/:id', (req, res, next) => {
 			if (note !== undefined) {
 				res.status(200).json(note);
 			} else {
-				next(['h404', `Note with ID ${id} not found.`]);
+				next(['h404', `The note with ID '${id}' was not found.`]);
 			}
 		})
 		.catch((err) => {
@@ -36,7 +36,7 @@ router.post('/', (req, res, next) => {
 	const { title, textBody } = req.body;
 	if (title && textBody) {
 		const _id = uuidv5(uuidName, uuidv4());
-		const newNote = { title: title, text_body: textBody, _id: _id, __v: 0 };
+		const newNote = { title, text_body: textBody, _id, __v: 0 };
 		postNote(newNote)
 			.then((note) => {
 				res.status(201).json({ id: note });
@@ -49,7 +49,36 @@ router.post('/', (req, res, next) => {
 	}
 });
 
-router.put('/:id', (req, res, next) => {});
+router.put('/:id', (req, res, next) => {
+	const _id = req.params.id;
+	// so much nonsense __v.
+	// can't reference req.body.__v directly, despite it conforming with javascript naming convention.
+	// can't increment it in place.
+	// all this just to keep functional parity with the original backend.
+	// >.>
+	// <.<
+	if (req.body.title && req.body.textBody && typeof req.body['__v'] === 'number') {
+		const { title, textBody } = req.body;
+		console.log(req.body['__v']);
+		let __v = req.body['__v'];
+		__v += 1;
+		console.log(__v);
+		const updatedNote = { title, text_body: textBody, _id, __v };
+		putNote(updatedNote)
+			.then((updateCount) => {
+				if (updateCount !== undefined && updateCount > 0) {
+					res.status(200).json({ updateCount });
+				} else {
+					next(['h404', `The note with ID '${_id}' was not found!`]);
+				}
+			})
+			.catch((err) => {
+				next(['h500', err]);
+			});
+	} else {
+		next(['h400', 'Missing note property!']);
+	}
+});
 
 router.delete('/:id', (req, res, next) => {});
 

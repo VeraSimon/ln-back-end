@@ -64,7 +64,7 @@ router.put('/edit/:id', (req, res, next) => {
 	// all this just to keep functional parity with the original backend.
 	// >.>
 	// <.<
-	if (req.body.title && req.body.textBody && typeof req.body['__v'] === 'number') {
+	if (req.body.title && req.body.textBody && req.body.tags) {
 		const { title, textBody } = req.body;
 		let __v = req.body['__v'];
 		__v += 1;
@@ -86,12 +86,14 @@ router.put('/edit/:id', (req, res, next) => {
 });
 
 router.delete('/delete/:id', (req, res, next) => {
-	delNote(req.params.id)
+	const id = req.params.id;
+	delNote(id)
 		.then((deleteCount) => {
 			if (deleteCount > 0) {
-				res.status(200).json({ deleteCount });
+				res.status(200).json({ success: `Note '${id}' was deleted successfully!` });
 			} else {
-				next(['h404', 'Note not found!']);
+				// next(['h404', 'Note not found!']);
+				res.status(404).json({ message: `Note '${id}' not found!` });
 			}
 		})
 		.catch((err) => {

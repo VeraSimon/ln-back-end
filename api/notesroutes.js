@@ -7,7 +7,7 @@ const { getNotes, postNote, putNote, delNote } = require('../data/models/notesmo
 const router = express.Router();
 const uuidName = process.env.UUID_NAME || '00000000-0000-0000-0000-000000000000';
 
-router.get('/', (req, res, next) => {
+router.get('/get/all', (req, res, next) => {
 	getNotes()
 		.then((notesList) => {
 			res.status(200).json(notesList);
@@ -17,7 +17,7 @@ router.get('/', (req, res, next) => {
 		});
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/get/:id', (req, res, next) => {
 	const { id } = req.params;
 	getNotes(id)
 		.then((note) => {
@@ -32,7 +32,7 @@ router.get('/:id', (req, res, next) => {
 		});
 });
 
-router.post('/', (req, res, next) => {
+router.post('/create', (req, res, next) => {
 	const { title, textBody } = req.body;
 	if (title && textBody) {
 		const _id = uuidv5(uuidName, uuidv4());
@@ -49,7 +49,7 @@ router.post('/', (req, res, next) => {
 	}
 });
 
-router.put('/:id', (req, res, next) => {
+router.put('/edit/:id', (req, res, next) => {
 	const _id = req.params.id;
 	// so much nonsense __v.
 	// can't reference req.body.__v directly, despite it conforming with javascript naming convention.
@@ -80,7 +80,7 @@ router.put('/:id', (req, res, next) => {
 	}
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/delete/:id', (req, res, next) => {
 	delNote(req.params.id)
 		.then((deleteCount) => {
 			if (deleteCount > 0) {

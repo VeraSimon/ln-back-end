@@ -52,14 +52,14 @@ const postNote = (newNote) => {
 
 	return db('notes')
 		.insert(newNote)
-		.into('notes')
-		.then((note) => {
-			// TODO Implement tag fetching
-			// TODO Implement tag additions to DB
-			note.tags = [];
-			return note;
-		})
-		.catch((err) => console.error('Model Error:\n', err));
+		.into('notes');
+	// .then((note) => {
+	// 	// TODO Implement tag fetching
+	// 	// TODO Implement tag additions to DB
+	// 	note.tags = [];
+	// 	return note;
+	// })
+	// .catch((err) => console.error('Model Error:\n', err));
 };
 
 const putNote = (updatedNote) => {

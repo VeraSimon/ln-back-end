@@ -36,10 +36,17 @@ router.post('/create', (req, res, next) => {
 	const { title, textBody } = req.body;
 	if (title && textBody) {
 		const _id = uuidv5(uuidName, uuidv4());
-		const newNote = { title, text_body: textBody, _id, __v: 0 };
+		const newNote = { title, textBody, _id, __v: 0 };
 		postNote(newNote)
-			.then((note) => {
-				res.status(201).json({ id: note });
+			.then((id) => {
+				if (id[0] >= 0) {
+					res.status(201).json({ _id });
+				} else {
+					next([
+						'h500',
+						'Not sure what happened to the database here. Maybe it went down? Contact the systems administrator with the approximate time you got this message.'
+					]);
+				}
 			})
 			.catch((err) => {
 				next(['h500', err]);
@@ -59,11 +66,9 @@ router.put('/edit/:id', (req, res, next) => {
 	// <.<
 	if (req.body.title && req.body.textBody && typeof req.body['__v'] === 'number') {
 		const { title, textBody } = req.body;
-		console.log(req.body['__v']);
 		let __v = req.body['__v'];
 		__v += 1;
-		console.log(__v);
-		const updatedNote = { title, text_body: textBody, _id, __v };
+		const updatedNote = { title, textBody, _id, __v };
 		putNote(updatedNote)
 			.then((updateCount) => {
 				if (updateCount > 0) {

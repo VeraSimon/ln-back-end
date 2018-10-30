@@ -66,7 +66,7 @@ router.put('/:id', (req, res, next) => {
 		const updatedNote = { title, text_body: textBody, _id, __v };
 		putNote(updatedNote)
 			.then((updateCount) => {
-				if (updateCount !== undefined && updateCount > 0) {
+				if (updateCount > 0) {
 					res.status(200).json({ updateCount });
 				} else {
 					next(['h404', `The note with ID '${_id}' was not found!`]);
@@ -80,6 +80,18 @@ router.put('/:id', (req, res, next) => {
 	}
 });
 
-router.delete('/:id', (req, res, next) => {});
+router.delete('/:id', (req, res, next) => {
+	delNote(req.params.id)
+		.then((deleteCount) => {
+			if (deleteCount > 0) {
+				res.status(200).json({ deleteCount });
+			} else {
+				next(['h404', 'Note not found!']);
+			}
+		})
+		.catch((err) => {
+			next(['h500', err]);
+		});
+});
 
 module.exports = router;

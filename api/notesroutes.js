@@ -93,7 +93,8 @@ router.delete('/delete/:id', (req, res, next) => {
 				res.status(200).json({ success: `Note '${id}' was deleted successfully!` });
 			} else {
 				// next(['h404', 'Note not found!']);
-				res.status(404).json({ message: `Note '${id}' not found!` });
+				// res.status(404).json({ message: `Note '${id}' not found!` });
+				next(['h404', 'Note not found!', { message: `Note '${id}' not found!` }]);
 			}
 		})
 		.catch((err) => {

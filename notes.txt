@@ -1,0 +1,53 @@
+﻿// yarn add pg
+
+// ~~~ .env ~~~ //
+PORT=8080
+DB_HOST=localhost
+DB_NAME=notes
+DB_USER=notesuser
+DB_PASS=something
+
+// ~~~ knexfile.js ~~~ //
+require('dotenv').config();
+
+// use against a 'local' copy of postgres
+const localPg = {
+	host: process.env.DB_HOST,
+	database: process.env.DB_NAME,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS
+};
+
+// DATABASE_URL is added as an env var in heroku when adding postgres
+// const pgConnection = process.env.DATABASE_URL + '?ssl=true' || localPg;
+const pgConnection = process.env.DATABASE_URL || localPg;
+
+production...
+	client: 'pg',
+	connection: pgConnection,
+	migrations: {
+		tableName: ...,
+		directory: './data/migrations'
+	},
+	seeds: {
+		directory: './data/seeds'
+	}
+...
+
+// ~~~ config.js ~~~ //
+require('dotenv').config();
+// in Heroku: Add DB env var. Set to 'production'.
+const dbEngine = process.env.DB || 'development';
+const knexConfig = require('../knexfile')[dbEngine];
+
+module.exports = require('knex')(knexConfig);
+
+
+
+// ~~~ herokucli ~~~ //
+> yarn add -D heroku
+> yarn run heroku knex migrate:latest -a <app_name>
+// login
+> yarn run heroku knex seed:run -a <app_name>
+// login
+

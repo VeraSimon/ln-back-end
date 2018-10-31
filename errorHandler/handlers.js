@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { errors } = require('./errors');
 
-const debugging = process.env.DEBUG || false;
+const debugging = process.env.DEBUGGING.toLowerCase() === 'true' || false;
 
 // express.js middleware
 const errorHandler = (err, req, res, next) => {

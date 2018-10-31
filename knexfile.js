@@ -8,7 +8,7 @@ const localPg = {
 	password: process.env.DB_PASS
 };
 
-const pgConnection = process.env.DATABASE_URL + '?ssl=true' || localPg;
+const pgConnection = process.env.DATABASE_URL || localPg;
 
 module.exports = {
 	development: {

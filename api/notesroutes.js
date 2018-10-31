@@ -12,6 +12,7 @@ const debugging = process.env.DEBUGGING.toLowerCase() === 'true' || false;
 router.get('/get/all', (req, res, next) => {
 	getNotes()
 		.then((notesList) => {
+			if (debugging === true) console.log('notesList:', notesList);
 			res.status(200).json(notesList);
 		})
 		.catch((err) => {
@@ -23,6 +24,7 @@ router.get('/get/:id', (req, res, next) => {
 	const { id } = req.params;
 	getNotes(id)
 		.then((note) => {
+			if (debugging === true) console.log('note:', note);
 			if (note !== undefined) {
 				res.status(200).json(note);
 			} else {
@@ -35,8 +37,9 @@ router.get('/get/:id', (req, res, next) => {
 });
 
 router.post('/create', (req, res, next) => {
-	const { title, textBody } = req.body;
-	if (title && textBody) {
+	if (req.body.title && req.body.textBody) {
+		const { title, textBody } = req.body;
+		if (debugging === true) console.log('title:', title, '\n', 'textBody:', textBody);
 		const _id = uuidv5(uuidName, uuidv4());
 		const newNote = { title, textBody, _id, __v: 0 };
 		postNote(newNote)
@@ -63,9 +66,11 @@ router.put('/edit/:id', (req, res, next) => {
 	const _id = req.params.id;
 	if (req.body.title && req.body.textBody && req.body.tags) {
 		const { title, textBody } = req.body;
+		if (debugging === true) console.log('title:', title, '\n', 'textBody:', textBody);
 		// using getNotes(id) in lieu of having a DB that can auto-increment a column on update
 		getNotes(_id)
 			.then((note) => {
+				if (debugging === true) console.log('note:', note);
 				if (note !== undefined) {
 					let __v = note['__v'];
 					__v += 1;
@@ -73,6 +78,7 @@ router.put('/edit/:id', (req, res, next) => {
 					// here's the putNote(editedNote)!
 					putNote(updatedNote)
 						.then((updateCount) => {
+							if (debugging === true) console.log('updateCount:', updateCount);
 							res.status(200).json({ updateCount });
 						})
 						.catch((err) => {
@@ -92,6 +98,7 @@ router.delete('/delete/:id', (req, res, next) => {
 	const id = req.params.id;
 	delNote(id)
 		.then((deleteCount) => {
+			if (debugging === true) console.log('deleteCount:', deleteCount);
 			if (deleteCount > 0) {
 				res.status(200).json({ success: `Note '${id}' was deleted successfully!` });
 			} else {

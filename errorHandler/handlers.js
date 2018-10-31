@@ -1,4 +1,7 @@
+require('dotenv').config();
 const { errors } = require('./errors');
+
+const debugging = process.env.DEBUG || false;
 
 // express.js middleware
 const errorHandler = (err, req, res, next) => {
@@ -15,7 +18,7 @@ const errorHandler = (err, req, res, next) => {
 	if (!errors.hasOwnProperty(status)) throw `Uncaught Exception! Please review:\n${err}`;
 
 	// continue as normal
-	if (status === 'h500') console.error('Error:\n', message);
+	if (status === 'h500' && debugging === true) console.error('Error:\n', message);
 	const error = { ...errors[status], errorOutput: message };
 	if (kvps !== null && typeof kvps === 'object') {
 		for (let key in kvps) {

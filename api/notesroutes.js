@@ -1,11 +1,13 @@
 const express = require('express');
 const uuidv4 = require('uuid/v4');
 const uuidv5 = require('uuid/v5');
+require('dotenv').config();
 
 const { getNotes, postNote, putNote, delNote } = require('../data/models/notesmodels');
 
 const router = express.Router();
 const uuidName = process.env.UUID_NAME || '00000000-0000-0000-0000-000000000000';
+const debugging = process.env.DEBUGGING.toLowerCase() === 'true' || false;
 
 router.get('/get/all', (req, res, next) => {
 	getNotes()
@@ -39,7 +41,7 @@ router.post('/create', (req, res, next) => {
 		const newNote = { title, textBody, _id, __v: 0 };
 		postNote(newNote)
 			.then((id) => {
-				if (process.env.DEBUG === true) console.log('id:', id);
+				if (debugging === true) console.log('id:', id);
 				if (id[0] >= 0) {
 					res.status(201).json({ _id });
 				} else {

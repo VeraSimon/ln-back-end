@@ -39,6 +39,7 @@ router.post('/create', (req, res, next) => {
 		const newNote = { title, textBody, _id, __v: 0 };
 		postNote(newNote)
 			.then((id) => {
+				if (process.env.DEBUG === true) console.log('id:', id);
 				if (id[0] >= 0) {
 					res.status(201).json({ _id });
 				} else {

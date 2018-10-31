@@ -1,6 +1,6 @@
 exports.seed = function(knex, Promise) {
 	return knex('note_tags')
-		.del()
+		.truncate()
 		.then(function() {
 			return knex('note_tags').insert([
 				{ note_id: 'cc2cc3e9-5e20-5fbe-83e8-2ff155a7b993', tag_id: 2 },

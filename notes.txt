@@ -46,8 +46,7 @@ module.exports = require('knex')(knexConfig);
 
 // ~~~ herokucli ~~~ //
 > yarn add -D heroku
-> yarn run heroku knex migrate:latest -a <app_name>
+> yarn run heroku run knex migrate:latest -a <app_name>
 // login
-> yarn run heroku knex seed:run -a <app_name>
+> yarn run heroku run knex seed:run -a <app_name>
 // login
-

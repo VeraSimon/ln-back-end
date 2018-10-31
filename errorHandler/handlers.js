@@ -29,6 +29,7 @@ const errorHandler = (err, req, res, next) => {
 const statusObj = (status, message, kvps) => {
 	// status = http status
 	// message = arbitrary message provided by the function call
+	// kvps = Optional object of arbitrary key-value pairs to add to the returned error object
 	if (!errors.hasOwnProperty(status)) {
 		return { error: `HTTP status '${status}' not defined!`, status, message };
 	} else {

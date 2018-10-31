@@ -19,10 +19,12 @@
 		"helmet": "^3.14.0",
 		"jsonwebtoken": "^8.3.0",
 		"knex": "^0.15.2",
+		"pg": "^7.6.0",
 		"sqlite3": "^4.0.3",
 		"uuid": "^3.3.2"
 	},
 	"devDependencies": {
+		"heroku": "^7.18.3",
 		"jest": "^23.6.0",
 		"nodemon": "^1.18.5",
 		"supertest": "^3.3.0"

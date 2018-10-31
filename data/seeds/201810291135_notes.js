@@ -1,8 +1,6 @@
 exports.seed = function(knex, Promise) {
 	return knex('notes')
-		.raw('SET foreign_key_checks = 0')
-		.truncate()
-		.raw('SET foreign_key_checks = 1')
+		.del()
 		.then(function() {
 			return knex('notes').insert([
 				{ _id: 'cc2cc3e9-5e20-5fbe-83e8-2ff155a7b993', title: 'rowValue1', textBody: 'rowValue1', __v: 0 },

@@ -15,8 +15,9 @@ const errorHandler = (err, req, res, next) => {
 	// err = [status, message, {optional KVPs to add to req.body}]
 	// err[0] = HTTP status. Used in res.status().
 	// err[1] = Arbitrary message provided by the function call. Assigned to ErrorOutput key.
-	// err[2] = (Optionally) add arbitrary KVPs to the body of the response, in case an existing frontend is expecting them.
 	// Ex: next(["h404", "Oh no, your thing doesn't exist!"])
+	// err[2] = (Optionally) add arbitrary KVPs to the body of the response, in case an existing frontend is expecting them.
+	// Ex: next(["h500", "Database error.", {message: "An unspecified database error ocurred."}])
 	const status = err[0];
 	const message = err[1];
 	const kvps = err[2] || null;

@@ -1,4 +1,11 @@
-require('dotenv').config();
+let isDotEnv = true;
+try {
+	require('dotenv').config();
+} catch (e) {
+	isDotEnv = false;
+	console.log('INFO: dotenv is not installed.');
+}
+
 const { errors } = require('./errors');
 
 const debugging = process.env.DEBUGGING.toLowerCase() === 'true' || false;
@@ -18,7 +25,12 @@ const errorHandler = (err, req, res, next) => {
 	if (!errors.hasOwnProperty(status)) throw `Uncaught Exception! Please review:\n${err}`;
 
 	// continue as normal
-	if (status === 'h500' && debugging === true) console.error('Error:\n', message);
+	if (!isDotEnv) {
+		if (status === 'h500') console.error('Error:\n', message);
+	} else {
+		if (status === 'h500' && debugging === true) console.error('Error:\n', message);
+	}
+
 	const error = { ...errors[status], errorOutput: message };
 	if (kvps !== null && typeof kvps === 'object') {
 		for (let key in kvps) {

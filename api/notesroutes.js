@@ -39,7 +39,7 @@ router.get('/get/:id', (req, res, next) => {
 router.post('/create', (req, res, next) => {
 	if (req.body.title && req.body.textBody) {
 		const { title, textBody } = req.body;
-		if (debugging === true) console.log('title:', title, '\n', 'textBody:', textBody);
+		if (debugging === true) console.log('title:', title, '\ntextBody:', textBody);
 		const _id = uuidv5(uuidName, uuidv4());
 		if (debugging === true) console.log('_id:', _id);
 		const newNote = { title, textBody, _id, __v: 0 };
@@ -68,7 +68,7 @@ router.put('/edit/:id', (req, res, next) => {
 	const _id = req.params.id;
 	if (req.body.title && req.body.textBody && req.body.tags) {
 		const { title, textBody } = req.body;
-		if (debugging === true) console.log('title:', title, '\n', 'textBody:', textBody);
+		if (debugging === true) console.log('title:', title, '\ntextBody:', textBody);
 		// using getNotes(id) in lieu of having a DB that can auto-increment a column on update
 		getNotes(_id)
 			.then((note) => {

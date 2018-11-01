@@ -47,11 +47,12 @@ router.post('/create', (req, res, next) => {
 			.then((id) => {
 				if (debugging === true) console.log('id:', id);
 				if (id[0] >= 0 || id.rowCount > 0) {
-					res.status(201).json({ _id });
+					res.status(201).json({ success: _id });
 				} else {
 					next([
 						'h500',
-						'Not sure what happened to the database here. Maybe it went down? Contact the systems administrator with the approximate time you got this message.'
+						'Not sure what happened to the database here. Maybe it went down? Contact the systems administrator with the approximate time you got this message.',
+						{ message: 'Something is wrong with the database. Let the DB administrator know about when this happened.' }
 					]);
 				}
 			})

@@ -1,4 +1,11 @@
-require('dotenv').config();
+let isDotEnv = true;
+try {
+	require('dotenv').config();
+} catch (e) {
+	isDotEnv = false;
+	console.log('INFO: dotenv is not installed.');
+}
+
 const { errors } = require('./errors');
 
 const debugging = process.env.DEBUGGING.toLowerCase() === 'true' || false;
@@ -8,8 +15,9 @@ const errorHandler = (err, req, res, next) => {
 	// err = [status, message, {optional KVPs to add to req.body}]
 	// err[0] = HTTP status. Used in res.status().
 	// err[1] = Arbitrary message provided by the function call. Assigned to ErrorOutput key.
-	// err[2] = (Optionally) add arbitrary KVPs to the body of the response, in case an existing frontend is expecting them.
 	// Ex: next(["h404", "Oh no, your thing doesn't exist!"])
+	// err[2] = (Optionally) add arbitrary KVPs to the body of the response, in case an existing frontend is expecting them.
+	// Ex: next(["h500", "Database error.", {message: "An unspecified database error ocurred."}])
 	const status = err[0];
 	const message = err[1];
 	const kvps = err[2] || null;
@@ -18,7 +26,12 @@ const errorHandler = (err, req, res, next) => {
 	if (!errors.hasOwnProperty(status)) throw `Uncaught Exception! Please review:\n${err}`;
 
 	// continue as normal
-	if (status === 'h500' && debugging === true) console.error('Error:\n', message);
+	if (!isDotEnv) {
+		if (status === 'h500') console.error('Error:\n', message);
+	} else {
+		if (status === 'h500' && debugging === true) console.error('Error:\n', message);
+	}
+
 	const error = { ...errors[status], errorOutput: message };
 	if (kvps !== null && typeof kvps === 'object') {
 		for (let key in kvps) {

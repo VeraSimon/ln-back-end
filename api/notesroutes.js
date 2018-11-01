@@ -41,11 +41,12 @@ router.post('/create', (req, res, next) => {
 		const { title, textBody } = req.body;
 		if (debugging === true) console.log('title:', title, '\n', 'textBody:', textBody);
 		const _id = uuidv5(uuidName, uuidv4());
+		if (debugging === true) console.log('_id:', _id);
 		const newNote = { title, textBody, _id, __v: 0 };
 		postNote(newNote)
 			.then((id) => {
 				if (debugging === true) console.log('id:', id);
-				if (id[0] >= 0) {
+				if (id[0] >= 0 || id.rowCount > 0) {
 					res.status(201).json({ _id });
 				} else {
 					next([

@@ -18,10 +18,26 @@ module.exports = {
 		},
 		useNullAsDefault: true,
 		migrations: {
-			directory: './data/migrations'
+			directory: './data/migrations/development'
 		},
 		seeds: {
-			directory: './data/seeds'
+			directory: './data/seeds/development'
+		}
+	},
+	test: {
+		client: 'pg',
+		connection: localPg,
+		useNullAsDefault: true,
+		pool: {
+			min: 2,
+			max: 10
+		},
+		migrations: {
+			tableName: 'knex_migrations',
+			directory: './data/migrations/test'
+		},
+		seeds: {
+			directory: './data/seeds/test'
 		}
 	},
 	production: {
@@ -34,10 +50,10 @@ module.exports = {
 		},
 		migrations: {
 			tableName: 'knex_migrations',
-			directory: './data/migrations'
+			directory: './data/migrations/production'
 		},
 		seeds: {
-			directory: './data/seeds'
+			directory: './data/seeds/production'
 		}
 	}
 };
